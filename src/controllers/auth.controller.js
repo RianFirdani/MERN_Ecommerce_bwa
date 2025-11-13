@@ -3,6 +3,8 @@ const { errorResponse, successResponse } = require('../utils/response')
 const cookieOption = require('../utils/cookieOption')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+const dotenv = require('dotenv')
+dotenv.config()
 
 const prisma = new PrismaClient()
 
@@ -12,14 +14,14 @@ const prisma = new PrismaClient()
         where: { email }
     })
 
-    const hashPassword = bcrypt.hash(password, 10)
+    const hashPassword =await bcrypt.hash(password, 10)
 
     if (duplicate) errorResponse(res, "email Already Exist", null, 400)
     const user = await prisma.user.create({
         data: {
             name,
             email,
-            passwoord: hashPassword
+            password: hashPassword
         }
     })
     return successResponse(res,"User Created",{id : user.id, name : user.name, email:user.email},200)
@@ -27,17 +29,18 @@ const prisma = new PrismaClient()
 
  const login = async (req, res) => {
     const { email, password } = req.body
-    const user = prisma.user.findUnique({
+    const user =  await prisma.user.findUnique({
         where : {email}
     })
     if(!user) errorResponse(res,"User is not existed",null,400)
     
-    const isSuccess = bcrypt.compare(password,user.password)
+    const isSuccess =await bcrypt.compare(password,user.password)
 
-    if(isSuccess){
-        const token = jwt.sign(user.id,process.env.TOKEN)
-        return successResponse(res,"Login successFull",{token},200)
-    }
+    if(!isSuccess)return errorResponse(res,"Wrong password",400)
+
+    const token = await jwt.sign(user.id,process)
+        console.log(token)
+    return successResponse(res,'Login Successfull',token,200)
 }
 
  const logout = async (req,res)=>{
