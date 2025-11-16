@@ -4,7 +4,7 @@ const  verifyToken  = require('../middlewares/verifyToken')
 
 const router = express.Router()
 
-router.use('/',(req,res)=> verifyToken(req,res))
+router.use('/',(req,res,next)=> verifyToken(req,res,next))
 
 router.get('/',getInventories)
 router.get('/:id',getInventory)

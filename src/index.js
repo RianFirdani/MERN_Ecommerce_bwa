@@ -5,10 +5,12 @@ const cors = require('cors')
 const authRoutes = require('./routes/auth.route')
 const inventoryRoutes = require('./routes/inventory.route')
 
+dotenv.config()
+
 const app = express()
 const PORT = process.env.PORT
 
-dotenv.config()
+
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))
