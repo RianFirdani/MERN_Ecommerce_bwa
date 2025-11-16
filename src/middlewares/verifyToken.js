@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken')
 
-export const verifyToken = (req,res)=>{
+const verifyToken = (req,res)=>{
     const {authorization} = req.headers
 
     if(!authorization) res.status(401).json({error : "Token Required"})
     
-    const token = process.env.TOKEN
+    const token = "RahasiaParah"
     const bearerToken = authorization.split(' ')[1]
 
     try {
@@ -17,3 +17,4 @@ export const verifyToken = (req,res)=>{
     }
 
 }
+module.exports = verifyToken

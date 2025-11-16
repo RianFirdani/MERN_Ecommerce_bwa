@@ -3,6 +3,7 @@ const dotenv = require('dotenv')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const authRoutes = require('./routes/auth.route')
+const inventoryRoutes = require('./routes/inventory.route')
 
 const app = express()
 const PORT = process.env.PORT
@@ -14,6 +15,7 @@ app.use(express.urlencoded({extended : true}))
 app.use(cors())
 
 app.use('/api/auth',authRoutes)
+app.use('/',inventoryRoutes)
 
 app.listen(PORT,()=>{
     console.log(`Server is listening on Port : ${{PORT}}`)

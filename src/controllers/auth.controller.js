@@ -1,4 +1,4 @@
-const {PrismaClient} = require('@prisma/client')
+const prisma = require('../config/prisma')
 const { errorResponse, successResponse } = require('../utils/response')
 const cookieOption = require('../utils/cookieOption')
 const jwt = require('jsonwebtoken')
@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt')
 const dotenv = require('dotenv')
 dotenv.config()
 
-const prisma = new PrismaClient()
+//const prisma = new PrismaClient()
 
  const register = async (req, res) => {
     const { name, email, password } = req.body
@@ -14,7 +14,7 @@ const prisma = new PrismaClient()
         where: { email }
     })
 
-    const hashPassword =await bcrypt.hash(password, 10)
+    const hashPassword = await bcrypt.hash(password, 10)
 
     if (duplicate) errorResponse(res, "email Already Exist", null, 400)
     const user = await prisma.user.create({
@@ -38,13 +38,17 @@ const prisma = new PrismaClient()
 
     if(!isSuccess)return errorResponse(res,"Wrong password",400)
 
-    const token = await jwt.sign(user.id,process)
-        console.log(token)
+    const token = await jwt.sign(user.id,"RahasiaParah",{expiresIn : "1h"})
+    res.cookie('token',token,cookieOption(req))
     return successResponse(res,'Login Successfull',token,200)
 }
 
  const logout = async (req,res)=>{
-    console.log('anggap ja logoout')
+    res.clearCookie('token',{
+        ...cookieOption(req),
+        maxAge : undefined
+    })
+        return successResponse(res,'Logout Successfull')
 }
 
 module.exports = {register,login,logout}
