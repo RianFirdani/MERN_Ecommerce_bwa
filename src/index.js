@@ -17,7 +17,8 @@ app.use(express.urlencoded({extended : true}))
 app.use(cors())
 
 app.use('/api/auth',authRoutes)
-app.use('/',inventoryRoutes)
+app.use('/api/inventories',inventoryRoutes)
+app.use('/api/products',productRoutes)
 
 app.listen(PORT,()=>{
     console.log(`Server is listening on Port : ${{PORT}}`)

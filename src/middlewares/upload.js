@@ -19,8 +19,10 @@ const fileFilter = (req,file,cb) =>{
     else cb(new Error("File extension is not allowed"))
 }
 
-export const upload = multer({ 
+const upload = multer({ 
     storage: storage, 
     fileFilter,
     limits : {fileSize : 1024 * 1024 * 5} 
 })
+
+module.exports = upload
