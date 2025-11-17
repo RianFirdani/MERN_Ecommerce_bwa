@@ -82,10 +82,76 @@ const createProduct = async (req,res)=>{
     })
 }
 
-const deleteProduct = (req,res)=>{
-
+const deleteProduct = async (req,res)=>{
+    const {id} = req.params
+    try {
+        const product = await prisma.product.delete({
+            where : {id}
+        })
+        if(!product) errorResponse(res,"Data not found id : " + id)
+        
+        if(product.image){
+            const oldImagePath = path.join(
+                process.cwd(),
+                "uploads",
+                path.basename(product.image)
+            )
+            fs.unlink(oldImagePath , (e)=>{
+                if(e) console.log("Update data failed")
+                else console.log("Update data success")
+        })
+        }
+        return successResponse(res,"Success to delete data id : " + id)
+    } catch (error) {
+        return errorResponse(res,"Failed to delete data",null,401)
+    }
 }
 
-const updateProduct = (req,res)=>{
+const updateProduct = async (req,res)=>{
+    const {name,price,stock,description,inventoryId} = req.body
+    const image = req.file ? `/uploads/${req.file.filename}` : undefined
 
+    try {
+        const product = await prisma.product.findFirst({
+            where : {id}
+        })
+    if(!product) errorResponse(res,"Data not found",null,404)
+
+    if(image && product.image) {
+        const oldImagePath = path.join(
+            process.cwd(),
+            "uploads",
+            path.basename(product.image)
+        )
+        fs.unlink(oldImagePath , (e)=>{
+                if(e) console.log("Update data failed")
+                else console.log("Update data success")
+        })
+        
+    }
+    const updateData = {
+            name,
+            description,
+            price:parseFloat(price),
+            stock:parseInt(stock),
+            inventoryId,
+    }
+    if(image) updateData.image = image
+
+    const updateProduct = await prisma.product.update({
+        where : {id},
+        data : updateData
+    })
+    const base = `${req.protocol}://${req.get("host")}`
+    return successResponse(req,"Update Product id : "+id,{
+        ...updateProduct,
+        image : updateProduct.image ? cleanImage(base,updateProduct.image) : null 
+    })
+    } catch (error) {
+        return errorResponse(res,"Update data failed",{
+            message : error.message
+        })
+    }
 }
+
+module.exports = {getAllProducts,getProduct,getProductByInventory,createProduct,deleteProduct,updateProduct}
