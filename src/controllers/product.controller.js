@@ -62,8 +62,10 @@ const getProductByInventory = async  (req,res)=>{
 
 
 const createProduct = async (req,res)=>{
+    console.log(req.body)
     const {name,price,stock,description,inventoryId} = req.body
     const image = req.file ? `/uploads/${req.file.filename}` : null
+    
 
     const product = await prisma.product.create({
         data : {
@@ -76,7 +78,7 @@ const createProduct = async (req,res)=>{
         }
     })
     const base = `${req.protocol}://${req.get('host')}`
-    return successResponse(req,"create product Succesfully",{
+    return successResponse(res,"create product Succesfully",{
         ...product,
         image : product.image ? cleanImage(base,product.image) : null
     })

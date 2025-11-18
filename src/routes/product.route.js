@@ -15,6 +15,8 @@ const router = express.Router();
 router.get("/",getAllProducts);
 router.get("/:id",getProduct);
 router.get("/inventory/:id",getProductByInventory);
-router.post('/',verifyToken,createProduct)
+router.post('/',verifyToken,upload.single("image"),createProduct)
 router.delete('/',verifyToken,deleteProduct)
-router.put('/',verifyToken,updateProduct)
+router.put('/',verifyToken,upload.single("image"),updateProduct)
+
+module.exports = router
