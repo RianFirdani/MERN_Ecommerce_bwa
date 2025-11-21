@@ -41,3 +41,5 @@ const getSingle  = async(req,res)=>{
     return successResponse(res, 'Statsitic with Single date shown successfully', {totalPesanan , totalTerbayar})
 
 }
+
+module.exports = {getRange,getSingle}

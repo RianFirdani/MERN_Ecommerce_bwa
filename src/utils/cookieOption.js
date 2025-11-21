@@ -2,9 +2,9 @@
     const isProduction = process.env.NODE_ENV === "Production"
 
     return {
-        httponly : true,
+        httpOnly : true,
         secure : isProduction && req.hostname !== "localhost",
-        sameStie : "Strict",
+        sameSite : "Strict",
         path : "/",
         maxAge : 60*60*24*1000
     }

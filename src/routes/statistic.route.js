@@ -1,5 +1,6 @@
 const express = require('express')
 const verifyToken = require('../middlewares/verifyToken')
+const {getRange,getSingle} = require('../controllers/statistic.controller.js')
 
 const router = express.Router()
 

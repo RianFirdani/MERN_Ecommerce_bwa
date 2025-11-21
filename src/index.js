@@ -6,6 +6,8 @@ const authRoutes = require('./routes/auth.route')
 const inventoryRoutes = require('./routes/inventory.route')
 const productRoutes = require('./routes/product.route')
 const cartRoutes = require('./routes/cart.route')
+const invoiceRoutes = require('./routes/invoice.route')
+const statisticRoutes  = require('./routes/statistic.route')
 
 dotenv.config()
 
@@ -22,7 +24,8 @@ app.use('/api/auth',authRoutes)
 app.use('/api/inventories',inventoryRoutes)
 app.use('/api/products',productRoutes)
 app.use('/api/cart',cartRoutes)
-app.use('/api/cart',cartRoutes)
+app.use('/api/invoice',invoiceRoutes)
+app.use('/api/statistic',statisticRoutes)
 
 app.listen(PORT,()=>{
     console.log(`Server is listening on Port : ${{PORT}}`)

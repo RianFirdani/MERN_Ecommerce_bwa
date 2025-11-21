@@ -1,8 +1,9 @@
 const prisma = require('../config/prisma')
+const { connect } = require('../routes/invoice.route')
 const{errorResponse,successResponse} = require('../utils/response')
 
 
-const getAllCard = async (req,res)=>{
+const getAllCart = async (req,res)=>{
     console.log(req.user)
     const cart = await prisma.cart.findMany({
         where : {
@@ -18,6 +19,7 @@ const addToCart = async(req,res)=>{
     const product = await prisma.product.findFirst({
         where : {id : productId}
     })
+    console.log(req.user)
     if(!product) errorResponse(res,'there is no such a prooduct')
     const total = product.price * quantity
 
@@ -27,6 +29,13 @@ const addToCart = async(req,res)=>{
             quantity,
             total,
             userId : req.user.id
-        }
+            // product : {
+            //     connect : {id : product.id}
+            // }
+        },
+        include : {product : true}
     })
+    return successResponse(res,'Data Added!!')
 }
+
+module.exports = {getAllCart,addToCart}

@@ -10,8 +10,8 @@ const verifyToken = (req,res,next)=>{
 
     try {
         const jwtDecode = jwt.verify(bearerToken,token)
-        req.userData = jwtDecode
-        console.log(token,bearerToken,jwtDecode)
+        req.user = jwtDecode
+        console.log(jwtDecode)
         next()
     } catch (error) {
         console.log(error)

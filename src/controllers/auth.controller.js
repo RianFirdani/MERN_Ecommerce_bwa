@@ -38,7 +38,7 @@ dotenv.config()
 
     if(!isSuccess)return errorResponse(res,"Wrong password",400)
 
-    const token = await jwt.sign(user.id,process.env.SECRET)
+    const token = await jwt.sign({id : user.id},process.env.SECRET)
     res.cookie('token',token,cookieOption(req))
     return successResponse(res,'Login Successfull',token,200)
 }
