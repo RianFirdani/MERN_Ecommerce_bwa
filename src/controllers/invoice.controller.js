@@ -45,7 +45,7 @@ const checkOut = async (req,res)=>{
 
     if(carts.length === 0 ) errorResponse(res,"Cart is empty",null,404)
 
-    const items = carts.map(c => `${c.product.name} x ${c.quantity}`).join(', ')
+const items = carts.map(c => `${c.product.name} x ${c.quantity}`).join(', ')
     const total = carts.reduce((sum,item)=>sum + item.total,0)
 
     const invoice = await prisma.invoice.create({
